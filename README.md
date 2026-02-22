@@ -1,32 +1,82 @@
-# Helix v0.5 Demo — Min-hop Surface Reuse + Detect + Heatmap
+# Helix
 
-This is a **drop-in** repo zip intended to be a stable baseline.
+Helix is a multi-resolution time-series analysis engine.
 
-Included:
-- `helix run` — select + aggregate + score
-- `helix surface` — **min-hop reuse** (fast window sweep) for `count/sum/mean`
-- `helix detect` — extract a detection artifact from the surface
-- `helix heatmap` — render a surface heatmap PNG with:
-  - windows sorted by duration
-  - **smallest window closest to x-axis**
-  - **few x ticks showing dates only**
+It generates windowed signal surfaces from timestamped data, enabling structured inspection of trends, scale-dependent behavior, and anomalies across time.
 
-Cache directory: `.helix_cache/` (safe to delete).
+---
 
-## Install (uv)
-```bash
-uv venv --python 3.12
-uv pip install -e . --python .venv/bin/python3
+## Overview
+
+Helix converts raw time-indexed data into a structured surface defined by:
+
+- Time bins
+- Window sizes
+- Aggregated metrics
+- Optional scoring overlays
+
+The result is a long-form representation suitable for visualization, comparison across scales, and downstream analysis.
+
+---
+
+## Key Features
+
+- Configurable window and hop definitions
+- Multi-scale surface generation
+- YAML-based configuration
+- Pluggable scoring operators
+- CLI-driven workflow
+- Clear separation between engine code and generated outputs
+
+---
+
+## Example
+
+The following heatmap is generated from:
+
+- `examples/intermagnet/data/yellowknife_2025_01_01_to_09.csv`
+- `examples/intermagnet/specs/demo_intermagnet.yaml`
+
+![Intermagnet Heatmap](examples/intermagnet/runs/heatmap.png)
+
+---
+
+## Usage
+
+Generate a surface:
+
+```
+uv run helix surface   --spec examples/intermagnet/specs/demo_intermagnet.yaml   --events examples/intermagnet/data/yellowknife_2025_01_01_to_09.csv   --out outputs_surface
 ```
 
-## Demo: numeric (Intermagnet-like)
-```bash
-rm -rf .helix_cache outputs_surface detections
-uv run helix surface --spec examples/specs/demo_numeric.yaml --events examples/data/numeric.csv --out outputs_surface
-uv run helix detect  --spec examples/specs/demo_numeric.yaml --events examples/data/numeric.csv --out detections
-uv run helix heatmap --csv outputs_surface/surface.csv --out heatmap.png
+Generate a heatmap:
+
+```
+uv run helix heatmap   --csv outputs_surface/surface.csv   --out heatmap.png
 ```
 
-## Surface schema
-`surface.csv` columns are stable:
-`ts_bin,window,channel,series_key,metric,score`
+---
+
+## Repository Structure
+
+```
+src/        Engine source code
+examples/   Example datasets and specifications
+tests/      Smoke tests
+```
+
+Generated artifacts (outputs, logs, cache) are intentionally excluded from version control.
+
+---
+
+## Scope
+
+Helix focuses on structured, window-based analysis of time-series data.  
+It does not impose a domain, model, or interpretation layer.  
+It provides the surface; interpretation is left to the user.
+
+---
+
+## License
+
+MIT
