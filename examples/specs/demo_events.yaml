@@ -1,0 +1,20 @@
+time_col: ts
+cache_dir: .helix_cache
+
+base_channels:
+  - name: ev1
+    window: 5min
+    hop: 5min
+    group_by: [user]
+    filters:
+      - { col: event_code, op: eq, value: 1 }
+    aggs: [count]
+
+scoring:
+  - op: mad_z
+
+surface:
+  hop_min: "1min"
+  windows: ["5min","10min","30min","1h"]
+  channel: ev1
+  metric: count

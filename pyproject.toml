@@ -1,0 +1,27 @@
+[project]
+name = "helix"
+version = "0.5.0"
+description = "Helix v0.5 demo: min-hop surface reuse + detection extraction + heatmap CLI."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "pandas>=2.0",
+  "numpy>=1.24",
+  "pyyaml>=6.0",
+  "click>=8.1",
+  "pyarrow>=14.0",
+  "matplotlib>=3.7",
+]
+
+[project.scripts]
+helix = "helix.cli.main:cli"
+
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]

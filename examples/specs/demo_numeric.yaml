@@ -1,0 +1,21 @@
+time_col: ts
+cache_dir: .helix_cache
+
+base_channels:
+  - name: x_mean
+    window: 1min
+    hop: 1min
+    group_by: []
+    measure: x
+    aggs: [mean]
+
+scoring:
+  - op: ewma_residual_z
+    alpha: 0.10
+    warmup: 5
+
+surface:
+  hop_min: "10s"
+  windows: ["30s","1min","2min","5min","10min"]
+  channel: x_mean
+  metric: mean
