@@ -1,0 +1,21 @@
+time_col: timestamp
+cache_dir: .helix_cache
+
+base_channels:
+  - name: geomag
+    window: 1min
+    hop: 1min
+    group_by: [component]
+    measure: value
+    aggs: [mean]
+
+scoring:
+  - op: ewma_residual_z
+    alpha: 0.05
+    warmup: 60
+
+surface:
+  hop_min: "1min"
+  windows: ["5min","10min","30min","1h","2h","6h"]
+  channel: geomag
+  metric: mean
